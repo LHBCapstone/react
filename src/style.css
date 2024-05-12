@@ -1,0 +1,157 @@
+/* header */
+.nav {
+  display: flex;
+}
+
+.nav .me-auto {
+  justify-content: center;
+}
+
+.navbar-nav {
+  display: flex !important;
+  justify-content: center;
+}
+
+.navbar-nav .nav-link {
+  color: white; /* 링크의 글자색을 흰색으로 변경 */
+  text-decoration: none !important; /* 링크의 밑줄 제거 */
+}
+
+.navbar-nav .nav-link:hover {
+  color: lightgray; /* 호버 시 글자색을 회색으로 변경 */
+}
+
+.nav-dropdown .dropdown-menu {
+  background-color: #343a40; /* 드롭다운 메뉴 배경색 */
+}
+
+.nav-dropdown .dropdown-item {
+  color: white !important; /* 드롭다운 메뉴 아이템의 글자색을 흰색으로 변경 */
+}
+
+.nav-dropdown .dropdown-item:hover {
+  background-color: #495057; /* 호버 시 배경색 변경 */
+}
+
+
+/* .container{
+    display: flex;
+}
+.nav-menu ul{
+    display: flex;
+} 
+/* style.css */
+
+/* Global styles */
+/* body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .container {
+    width: 80%;
+    margin: 0 auto;
+  }
+  
+  /* Header styles */
+  /* .header {
+    background-color: #333;
+    color: #fff;
+    padding: 20px 0;
+  }
+  
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .logo h1 {
+    margin: 0;
+    font-size: 24px;
+    color: #fff;
+  }
+  .toHome{
+    text-decoration-line: none;
+  }
+  .nav-menu{
+    position: absolute;
+    right: 40%;
+  } */
+  
+  /* .nav-menu ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .nav-menu ul li {
+    display: inline;
+    margin-right: 20px;
+  }
+  
+  .nav-menu ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+  }
+  .login{
+    padding-left: 900px;
+  }
+  
+  .login a {
+    color: #fff;
+    text-decoration: none;
+    margin-right: 10px;
+  }
+   */
+  /* Join form styles */
+  /* .join-form {
+    width: 50%;
+    margin: 0 auto;
+  }
+
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .table th,
+  .table td {
+    padding: 10px;
+  }
+  
+  .table th {
+    text-align: right;
+    width: 30%;
+  }
+  
+  .table td {
+    width: 70%;
+  }
+
+  .btn {
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .btn-outline-secondary {
+    background-color: transparent;
+    border: 1px solid #333;
+    color: #333;
+  }
+  
+  .btn-outline-secondary:hover {
+    background-color: #333;
+    color: #fff;
+  } */
+  
+  /* Footer styles */
+  /* .footer {
+    background-color: #333;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+  } */
