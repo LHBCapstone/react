@@ -1,5 +1,5 @@
 import axios from "axios";
-import Form from 'react-bootstrap/Form';
+import Form from "react-bootstrap/Form";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -32,7 +32,7 @@ function Join() {
   /* 이메일 중복 체크 */
   const checkEmail = async () => {
     await axios
-      .get("/user/checkId", { params: { email: email } })
+      .get("http://localhost:8080/user/checkId", { params: { email: email } })
       .then((resp) => {
         console.log("[Join.js] checkEmailDuplicate() success :D");
         console.log(resp.data);
@@ -63,7 +63,7 @@ function Join() {
 
     //서버 주소와 통싱
     await axios
-      .post("/user/register", req)
+      .post("http://localhost:8080/user/register", req)
       .then((resp) => {
         console.log("[Join.js] join() success :D");
         console.log(resp.data);
@@ -96,10 +96,7 @@ function Join() {
                 size="50px"
               />{" "}
               &nbsp; &nbsp;
-              <button
-                className="btn btn-outline-danger"
-                onClick={checkEmail}
-              >
+              <button className="btn btn-outline-danger" onClick={checkEmail}>
                 <i className="fas fa-check"></i> 이메일 중복 확인
               </button>
             </td>
@@ -108,12 +105,12 @@ function Join() {
           <tr>
             <th>이름</th>
             <td>
-            <Form.Control
-              type="text"
-              placeholder="Search"
-              className="me-2"
-              aria-label="Search"
-              onChange={changeName}
+              <Form.Control
+                type="text"
+                placeholder="Search"
+                className="me-2"
+                aria-label="Search"
+                onChange={changeName}
               />
               {/* <input
                 type="text"
