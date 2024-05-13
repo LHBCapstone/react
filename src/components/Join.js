@@ -1,20 +1,29 @@
-import axios from "axios";
 import Form from "react-bootstrap/Form";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Button } from "react-bootstrap";
 
 function Join() {
   // 회원가입에 필요한 정보 선언
-  const [email, setEmail] = useState("");
+  const [firstEmail, setFirstEmail] = useState("");
+  const [lastEmail, setLastEmail] = useState("");
   const [name, setName] = useState("");
   const [pwd, setPwd] = useState("");
   const [checkPwd, setCheckPwd] = useState("");
+  const [usableEmail, setUsableEmail] = useState(false);
+  const [testName, setTestName] = useState("");
 
   const navigate = useNavigate();
 
   //입력이 들어올때마다 email이 업데이트됨
-  const changeEmail = (event) => {
-    setEmail(event.target.value);
+  const changeFirstEmail = (event) => {
+    setFirstEmail(event.target.value);
+    //이메일 확인을 하고 이메일 변경이 있으면 다시 false
+    setUsableEmail(false);
+  };
+  const changeLastEmail = (event) => {
+    setLastEmail(event.target.value);
+    setUsableEmail(false);
   };
 
   const changeName = (event) => {
@@ -29,57 +38,151 @@ function Join() {
     setCheckPwd(event.target.value);
   };
 
+  const getName = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/user/getName");
+      const data = await response.text();
+      setTestName(data);
+    } catch (error) {
+      console.error("Error fetching data: ", error);
+    }
+  };
+  const checkEmpty = () => {
+    if (pwd !== checkPwd) {
+      alert("비밀번호가 일치하지 않습니다.");
+      return false;
+    } else if (firstEmail === "") {
+      alert("이메일을 입력해 주세요.");
+      return false;
+    } else if (lastEmail === "") {
+      alert("빈칸이 있습니다.");
+      return false;
+    } else if (name === "") {
+      alert("이름을 입력해주세요.");
+      return false;
+    } else if (pwd === "") {
+      alert("비밀번호를 입력해 주세요.");
+      return;
+    } else if (usableEmail === false) {
+      alert("사용 가능한 이메일인지 확인해 주세요.");
+      return false;
+    }
+    return true;
+  };
   /* 이메일 중복 체크 */
   const checkEmail = async () => {
-    await axios
-      .get("http://localhost:8080/user/checkId", { params: { email: email } })
-      .then((resp) => {
-        console.log("[Join.js] checkEmailDuplicate() success :D");
-        console.log(resp.data);
+    if (firstEmail === "") {
+      alert("빈 칸이 있습니다.");
+      return;
+    }
+    if (lastEmail === "") {
+      alert("빈칸이 있습니다.");
+      return;
+    }
+    try {
+      const response = await fetch(
+        `http://localhost:8080/user/checkId?email=${
+          firstEmail + "@" + lastEmail
+        }`
+      );
+      const data = await response.json();
 
-        if (resp.status === 200) {
-          alert("사용 가능한 이메일입니다.");
-        }
-      })
-      .catch((err) => {
-        console.log("[Join.js] checkEmailDuplicate() error :<");
-        console.log(err);
+      console.log("[Join.js] checkEmailDuplicate() success :D");
+      console.log(data);
+      alert("성공!");
+      setUsableEmail(true);
 
-        const resp = err.response;
-        if (resp.status === 400) {
-          alert(resp.data);
+      if (response.status === 200) {
+        alert("사용 가능한 이메일입니다.");
+        setUsableEmail(true);
+      }
+    } catch (error) {
+      console.log("[Join.js] checkEmailDuplicate() error :<");
+      console.error(error);
+
+      if (error.response && error.response.status === 400) {
+        const data = await error.response.json();
+        alert(data);
+      }
+    }
+  };
+
+  const join = () => {
+    if (!checkEmpty()) {
+      return;
+    }
+    const data = {
+      name: name,
+      email: firstEmail + "@" + lastEmail,
+      password: pwd,
+    };
+    fetch("http://localhost:8080/user/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res)
+      .then((res) => {
+        if (res.status === 200) {
+          alert("회원가입 성공");
+        } else {
+          console.log(res.status);
         }
       });
   };
-
   /* 회원가입 */
-  const join = async () => {
+  const join1 = async () => {
     const req = {
-      email: email,
+      name: name,
+      email: firstEmail + "@" + lastEmail,
       password: pwd,
-      passwordCheck: checkPwd,
-      username: name,
     };
-
-    //서버 주소와 통싱
-    await axios
-      .post("http://localhost:8080/user/register", req)
-      .then((resp) => {
-        console.log("[Join.js] join() success :D");
-        console.log(resp.data);
-
-        alert(resp.data.username + "님 회원가입을 축하드립니다 🎊");
-        navigate("/login");
-      })
-      .catch((err) => {
-        console.log("[Join.js] join() error :<");
-        console.log(err);
-
-        const resp = err.response;
-        if (resp.status === 400) {
-          alert(resp.data);
-        }
+    //회원가입 제약사항
+    if (pwd !== checkPwd) {
+      alert("비밀번호가 일치하지 않습니다.");
+      return;
+    } else if (firstEmail === "") {
+      alert("이메일을 입력해 주세요.");
+      return;
+    } else if (lastEmail === "") {
+      alert("빈칸이 있습니다.");
+      return;
+    } else if (name === "") {
+      alert("이름을 입력해주세요.");
+      return;
+    } else if (usableEmail === false) {
+      alert("사용 가능한 이메일인지 확인해 주세요.");
+      return;
+    }
+    try {
+      const response = await fetch("http://localhost:8080/user/singup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(req),
       });
+
+      const data = await response.json();
+
+      console.log("[Join.js] join() success :D");
+      console.log(data);
+
+      if (response.status === 200) {
+        alert(data.username + "님 회원가입을 축하드립니다 🎊");
+        navigate("/login");
+      }
+    } catch (error) {
+      console.log("[Join.js] join() error :<");
+      console.error(error);
+
+      if (error.response && error.response.status === 400) {
+        const data = await error.response.json();
+        alert(data);
+      }
+    }
   };
 
   return (
@@ -91,8 +194,15 @@ function Join() {
             <td>
               <input
                 type="text"
-                value={email}
-                onChange={changeEmail}
+                value={firstEmail}
+                onChange={changeFirstEmail}
+                size="50px"
+              />
+              @
+              <input
+                type="text"
+                value={lastEmail}
+                onChange={changeLastEmail}
                 size="50px"
               />{" "}
               &nbsp; &nbsp;
@@ -101,7 +211,6 @@ function Join() {
               </button>
             </td>
           </tr>
-
           <tr>
             <th>이름</th>
             <td>
@@ -112,12 +221,6 @@ function Join() {
                 aria-label="Search"
                 onChange={changeName}
               />
-              {/* <input
-                type="text"
-                value={name}
-                onChange={changeName}
-                size="50px"
-              /> */}
             </td>
           </tr>
 
@@ -129,6 +232,7 @@ function Join() {
                 value={pwd}
                 onChange={changePwd}
                 size="50px"
+                autoCorrect="off"
               />
             </td>
           </tr>
@@ -141,6 +245,7 @@ function Join() {
                 value={checkPwd}
                 onChange={changeCheckPwd}
                 size="50px"
+                autoCorrect="off"
               />
             </td>
           </tr>
@@ -153,6 +258,10 @@ function Join() {
           <i className="fas fa-user-plus"></i> 회원가입
         </button>
       </div>
+      <p>{pwd}</p>
+      <p>{checkPwd}</p>
+      <Button onClick={getName}>name</Button>
+      <p>{testName}</p>
     </div>
   );
 }
