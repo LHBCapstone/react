@@ -22,33 +22,6 @@ const Login = () => {
     }
     return false;
   };
-  const login1 = async () => {
-    if (checkEmpty()) {
-      return;
-    }
-    const req = {
-      email: email,
-      password: password,
-    };
-    try {
-      const response = await fetch("http://localhost:8080/user/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(req),
-      });
-      const data = await response.json();
-      console.log("login success");
-      console.log(data);
-      alert("로그인 성공");
-      if (data.status === 200) {
-        alert("로그인 성공");
-      }
-    } catch {
-      alert("실패");
-    }
-  };
   const login = () => {
     const data = {
       email: email,

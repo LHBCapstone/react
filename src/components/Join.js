@@ -1,7 +1,6 @@
 import Form from "react-bootstrap/Form";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button } from "react-bootstrap";
 
 function Join() {
   // 회원가입에 필요한 정보 선언
@@ -11,7 +10,6 @@ function Join() {
   const [pwd, setPwd] = useState("");
   const [checkPwd, setCheckPwd] = useState("");
   const [usableEmail, setUsableEmail] = useState(false);
-  const [testName, setTestName] = useState("");
 
   const navigate = useNavigate();
 
@@ -38,15 +36,6 @@ function Join() {
     setCheckPwd(event.target.value);
   };
 
-  const getName = async () => {
-    try {
-      const response = await fetch("http://localhost:8080/user/getName");
-      const data = await response.text();
-      setTestName(data);
-    } catch (error) {
-      console.error("Error fetching data: ", error);
-    }
-  };
   const checkEmpty = () => {
     if (pwd !== checkPwd) {
       alert("비밀번호가 일치하지 않습니다.");
@@ -70,6 +59,38 @@ function Join() {
     return true;
   };
   /* 이메일 중복 체크 */
+  const checkEmail1 = () => {
+    if (firstEmail === "") {
+      alert("빈 칸이 있습니다.");
+      return;
+    }
+    if (lastEmail === "") {
+      alert("빈칸이 있습니다.");
+      return;
+    }
+    const data = {
+      email: firstEmail + "@" + lastEmail,
+    };
+
+    fetch("http://localhost:8080/user/checkEmail", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.status === 200) {
+          alert("사용가능");
+          return;
+        } else {
+          alert("이미 사용중인 이메일");
+          return;
+        }
+      });
+  };
+
   const checkEmail = async () => {
     if (firstEmail === "") {
       alert("빈 칸이 있습니다.");
@@ -258,10 +279,6 @@ function Join() {
           <i className="fas fa-user-plus"></i> 회원가입
         </button>
       </div>
-      <p>{pwd}</p>
-      <p>{checkPwd}</p>
-      <Button onClick={getName}>name</Button>
-      <p>{testName}</p>
     </div>
   );
 }
