@@ -110,7 +110,6 @@ function Join() {
 
       console.log("[Join.js] checkEmailDuplicate() success :D");
       console.log(data);
-      alert("성공!");
       setUsableEmail(true);
 
       if (response.status === 200) {
@@ -227,7 +226,7 @@ function Join() {
                 size="50px"
               />{" "}
               &nbsp; &nbsp;
-              <button className="btn btn-outline-danger" onClick={checkEmail}>
+              <button className="btn btn-outline-danger" onClick={checkEmail1}>
                 <i className="fas fa-check"></i> 이메일 중복 확인
               </button>
             </td>
