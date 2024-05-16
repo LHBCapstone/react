@@ -59,7 +59,7 @@ function Join() {
     return true;
   };
   /* 이메일 중복 체크 */
-  const checkEmail1 = () => {
+  const checkEmail = () => {
     if (firstEmail === "") {
       alert("빈 칸이 있습니다.");
       return;
@@ -79,19 +79,21 @@ function Join() {
       },
       body: JSON.stringify(data),
     })
-      .then((res) => res.json())
+      .then((res) => res)
       .then((res) => {
         if (res.status === 200) {
           alert("사용가능");
+          setUsableEmail(true);
           return;
         } else {
           alert("이미 사용중인 이메일");
+          setUsableEmail(false);
           return;
         }
       });
   };
 
-  const checkEmail = async () => {
+  const checkEmail1 = async () => {
     if (firstEmail === "") {
       alert("빈 칸이 있습니다.");
       return;
@@ -128,7 +130,11 @@ function Join() {
   };
 
   const join = () => {
-    if (!checkEmpty()) {
+    if (!usableEmail) {
+      alert("사용 가능한 이메일인지 확인해 주세요.");
+      return;
+    }
+    if(!checkEmpty()){
       return;
     }
     const data = {
@@ -226,7 +232,7 @@ function Join() {
                 size="50px"
               />{" "}
               &nbsp; &nbsp;
-              <button className="btn btn-outline-danger" onClick={checkEmail1}>
+              <button className="btn btn-outline-danger" onClick={checkEmail}>
                 <i className="fas fa-check"></i> 이메일 중복 확인
               </button>
             </td>
