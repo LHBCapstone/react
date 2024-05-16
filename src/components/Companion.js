@@ -3,7 +3,7 @@ import React from "react";
 function Companion() {
   return (
     <div>
-      <h2>동행</h2>
+      <h1>동행</h1>
     </div>
   );
 }
