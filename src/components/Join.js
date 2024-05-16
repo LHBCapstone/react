@@ -1,6 +1,7 @@
 import Form from "react-bootstrap/Form";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function Join() {
   // 회원가입에 필요한 정보 선언
@@ -93,42 +94,7 @@ function Join() {
       });
   };
 
-  const checkEmail1 = async () => {
-    if (firstEmail === "") {
-      alert("빈 칸이 있습니다.");
-      return;
-    }
-    if (lastEmail === "") {
-      alert("빈칸이 있습니다.");
-      return;
-    }
-    try {
-      const response = await fetch(
-        `http://localhost:8080/user/checkId?email=${
-          firstEmail + "@" + lastEmail
-        }`
-      );
-      const data = await response.json();
-
-      console.log("[Join.js] checkEmailDuplicate() success :D");
-      console.log(data);
-      setUsableEmail(true);
-
-      if (response.status === 200) {
-        alert("사용 가능한 이메일입니다.");
-        setUsableEmail(true);
-      }
-    } catch (error) {
-      console.log("[Join.js] checkEmailDuplicate() error :<");
-      console.error(error);
-
-      if (error.response && error.response.status === 400) {
-        const data = await error.response.json();
-        alert(data);
-      }
-    }
-  };
-
+    /* 회원가입 */
   const join = () => {
     if (!usableEmail) {
       alert("사용 가능한 이메일인지 확인해 주세요.");
@@ -153,62 +119,11 @@ function Join() {
       .then((res) => {
         if (res.status === 200) {
           alert("회원가입 성공");
+          window.location.href = "/login";
         } else {
           console.log(res.status);
         }
       });
-  };
-  /* 회원가입 */
-  const join1 = async () => {
-    const req = {
-      name: name,
-      email: firstEmail + "@" + lastEmail,
-      password: pwd,
-    };
-    //회원가입 제약사항
-    if (pwd !== checkPwd) {
-      alert("비밀번호가 일치하지 않습니다.");
-      return;
-    } else if (firstEmail === "") {
-      alert("이메일을 입력해 주세요.");
-      return;
-    } else if (lastEmail === "") {
-      alert("빈칸이 있습니다.");
-      return;
-    } else if (name === "") {
-      alert("이름을 입력해주세요.");
-      return;
-    } else if (usableEmail === false) {
-      alert("사용 가능한 이메일인지 확인해 주세요.");
-      return;
-    }
-    try {
-      const response = await fetch("http://localhost:8080/user/singup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(req),
-      });
-
-      const data = await response.json();
-
-      console.log("[Join.js] join() success :D");
-      console.log(data);
-
-      if (response.status === 200) {
-        alert(data.username + "님 회원가입을 축하드립니다 🎊");
-        navigate("/login");
-      }
-    } catch (error) {
-      console.log("[Join.js] join() error :<");
-      console.error(error);
-
-      if (error.response && error.response.status === 400) {
-        const data = await error.response.json();
-        alert(data);
-      }
-    }
   };
 
   return (

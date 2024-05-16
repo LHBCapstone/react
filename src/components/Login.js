@@ -1,10 +1,12 @@
 import { Form, Button, Container } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useEffect } from "react";
+import { useCookies } from "react-cookie";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
   const changeEmail = (event) => {
     setEmail(event.target.value);
   };
@@ -23,6 +25,9 @@ const Login = () => {
     return false;
   };
   const login = () => {
+    if(checkEmpty()){
+      return;
+    }
     const data = {
       email: email,
       password: password,
@@ -38,6 +43,8 @@ const Login = () => {
       .then((res) => {
         if (res.status === 200) {
           alert("로그인 성공");
+          setCookie("user", data.email);
+          window.location.href = "/main";
         } else {
           alert("로그인 실패");
         }
