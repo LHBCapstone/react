@@ -55,7 +55,6 @@ const Login = () => {
       <h2>Login</h2>
       <Container
         className="d-flex align-items-center justify-content-center"
-        
         style={{ minHeight: "60vh" }}
       >
         <div className="border border-warning border-3 rounded-3 p-5">
