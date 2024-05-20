@@ -25,7 +25,7 @@ const Login = () => {
     return false;
   };
   const login = () => {
-    if(checkEmpty()){
+    if (checkEmpty()) {
       return;
     }
     const data = {
