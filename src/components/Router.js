@@ -2,12 +2,13 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 
 import Login from "./member/Login";
-import Join from "./member/Login";
+import Join from "./member/Join";
 import Main from "./Main";
 import Guide from "./Guide";
 import Experience from "./Experience";
 import Plan from "./Plan";
 import Companion from "./Companion";
+import Profile from "./member/Profile";
 
 function Router() {
   return (
@@ -20,6 +21,7 @@ function Router() {
         <Route path="/experience" element={<Experience />} />
         <Route path="/plan" element={<Plan />} />
         <Route path="/companion" element={<Companion />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </div>
   );
