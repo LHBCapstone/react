@@ -18,6 +18,7 @@ const Profile = () => {
   const chCheckPassword = (event) => {
     setCheckPassword(event.target.value);
   };
+
   //이벤트 호출을 하지 않아도 자동으로 가장먼저 호출됨
   useEffect(() => {
     const cookieEmail = {
