@@ -36,24 +36,43 @@ const Profile = () => {
       },
       body: JSON.stringify(cookieEmail),
     })
-      .then((res) => res)
+      .then((res) => {
+        if (res.status === 200) {
+          return res.json();
+        }
+      })
       .then(
-        (res) => {
-          if (res.status === 200) {
-            alert(res.name);
-            setName(res.name);
-          } else {
-            alert("로그인 실패");
-          }
+        (data) => {
+          setName(data.name);
         },
         (err) => {
-          alert(err);
+          alert("접속실패" + err);
         }
       );
   });
 
   const changePassword = () => {};
-  const changeName = () => {};
+  const changeName = () => {
+    const data = {
+      email: email,
+      name: name,
+    };
+    fetch("http://localhost:8080/user/profile", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.status === 200) {
+          alert("변경 완료");
+        } else {
+          alert("변경 실패");
+        }
+      });
+  };
   return (
     <div>
       <div>
