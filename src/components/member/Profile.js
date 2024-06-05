@@ -19,6 +19,7 @@ const Profile = () => {
     setCheckPassword(event.target.value);
   };
 
+
   //이벤트 호출을 하지 않아도 자동으로 가장먼저 호출됨
   useEffect(() => {
     const cookieEmail = {
@@ -39,6 +40,7 @@ const Profile = () => {
       .then((res) => {
         if (res.status === 200) {
           return res.json();
+          ;
         }
       })
       .then(
@@ -46,28 +48,61 @@ const Profile = () => {
           setName(data.name);
         },
         (err) => {
-          alert("접속실패" + err);
+          alert(err);
         }
       );
-  });
+  }, [email]);
 
-  const changePassword = () => {};
-  const changeName = () => {
+  //비밀번호 변경 함수
+  const changePassword = () => {
+    if(password!==checkPassword){
+      setPassword("");
+      setCheckPassword("");
+      alert("비밀번호가 일치하지 않습니다.");
+      return;
+    }
+
     const data = {
-      email: email,
-      name: name,
-    };
-    fetch("http://localhost:8080/user/profile", {
+      email : email,
+      password : password
+    }
+
+    fetch("http://localhost:8080/user/changePw", {
       method: "POST",
       headers: {
         "Content-Type": "application/json; charset=utf-8",
       },
       body: JSON.stringify(data),
     })
-      .then((res) => res.json())
+    .then((res) => res)
+    .then((res) => {
+      if(res.status === 200){
+        alert("비밀번호 변경완료");
+        alert("다시 로그인 해주세요");
+        removeCookie("user"); // 쿠키 삭제
+        window.location.href = "/main";  //main화면으로 이동
+      }else
+      alert("변경 실패");
+    })
+  };
+
+  //이름 변경 함수
+  const changeName = () => {
+    const data = {
+      email: email,
+      name: name,
+    };
+    fetch("http://localhost:8080/user/changeName", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res)
       .then((res) => {
         if (res.status === 200) {
-          alert("변경 완료");
+          alert("이름 변경 완료");
         } else {
           alert("변경 실패");
         }
@@ -85,9 +120,9 @@ const Profile = () => {
           <Button onClick={changeName}>이름 변경</Button>
           <br />
           <Form.Label>비밀번호</Form.Label>
-          <Form.Control type="password" onChange={chPassword} />
+          <Form.Control type="password" value={password} onChange={chPassword} />
           <Form.Label>비밀번호 확인</Form.Label>
-          <Form.Control type="password" onChange={chCheckPassword} />
+          <Form.Control type="password" value={checkPassword} onChange={chCheckPassword} />
           <Button onClick={changePassword}>비밀번호 변경</Button>
         </Form>
       </div>
