@@ -9,6 +9,7 @@ import { useCookies } from "react-cookie";
 function NavTop() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [cookies, setCookie, removeCookie] = useCookies(["user"]);
+  const [name, setName] = useState("");
 
   useEffect(() => {
     // 컴포넌트가 렌더링될 때 쿠키를 확인하여 로그인 상태를 설정합니다.
@@ -16,9 +17,31 @@ function NavTop() {
       setIsLoggedIn(true);
     } else {
       setIsLoggedIn(false);
-    }
-  }, [cookies.user]); // 한 번만 실행됩니다.
-
+    } // 한 번만 실행됩니다.
+    const data = {
+      email: cookies.user,
+    };
+    fetch("http://localhost:8080/user/profile", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          return res.json();
+        }
+      })
+      .then(
+        (data) => {
+          setName(data.name);
+        },
+        (err) => {
+          alert(err);
+        }
+      );
+  }, [cookies.user]);
   const handleLogout = () => {
     // 로그아웃 처리
     removeCookie("user"); // 쿠키 삭제
@@ -68,6 +91,7 @@ function NavTop() {
           </NavDropdown>
           {isLoggedIn ? (
             <div className="user-info">
+              <div style={{ color: "white" }}>{name}님 안녕하세요!</div>;
               <Link to="/profile">회원 정보 확인</Link>
               <button onClick={handleLogout}>로그아웃</button>
             </div>
