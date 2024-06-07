@@ -9,6 +9,7 @@ import Experience from "./Experience";
 import Plan from "./Plan";
 import Companion from "./Companion";
 import Profile from "./member/Profile";
+import RegistGuide from "./guide/RegistGuide";
 
 function Router() {
   return (
@@ -22,6 +23,7 @@ function Router() {
         <Route path="/plan" element={<Plan />} />
         <Route path="/companion" element={<Companion />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/registGuide" element={<RegistGuide />} />
       </Routes>
     </div>
   );

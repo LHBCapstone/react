@@ -1,5 +1,6 @@
 import React from "react";
-import Border from "./guide/border";
+import Border from "./guide/Border";
+
 function Guide() {
   return (
     <div>
