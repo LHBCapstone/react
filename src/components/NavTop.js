@@ -5,7 +5,7 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useCookies } from "react-cookie";
-
+import SimpleNaverMap from "./SimpleNaverMap";
 function NavTop() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [cookies, setCookie, removeCookie] = useCookies(["user"]);
@@ -64,8 +64,8 @@ function NavTop() {
             </Link>
           </Nav.Link>
           <Nav.Link>
-            <Link className="toExperience" to="/experience">
-              경험
+            <Link className="SimpleNaverMap" to="/SimpleNaverMap">
+              map
             </Link>
           </Nav.Link>
           <Nav.Link>

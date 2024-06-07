@@ -10,7 +10,7 @@ import Plan from "./Plan";
 import Companion from "./Companion";
 import Profile from "./member/Profile";
 import RegistGuide from "./guide/RegistGuide";
-
+import SimpleNaverMap from "./SimpleNaverMap";
 function Router() {
   return (
     <div>
@@ -19,7 +19,7 @@ function Router() {
         <Route path="/login" element={<Login />} />
         <Route path="/join" element={<Join />} />
         <Route path="/guide" element={<Guide />} />
-        <Route path="/experience" element={<Experience />} />
+        <Route path="/SimpleNaverMap" element={<SimpleNaverMap />} />
         <Route path="/plan" element={<Plan />} />
         <Route path="/companion" element={<Companion />} />
         <Route path="/profile" element={<Profile />} />
