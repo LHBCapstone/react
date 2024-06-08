@@ -94,6 +94,8 @@ function NavTop() {
             <div className="user-info">
               <div style={{ color: "white" }}>{name}님 안녕하세요!</div>;
               <Link to="/profile">회원 정보 확인</Link>
+              '  '
+              <Link to="/message">채팅</Link>
               <button onClick={handleLogout}>로그아웃</button>
             </div>
           ) : (

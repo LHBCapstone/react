@@ -9,7 +9,7 @@ const RegistGuide = () => {
   const [price, setPrice] = useState("");
   const [address, setAddress] = useState("");
   const [result, setResult] = useState("");
-  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
+  const [cookies] = useCookies(["user"]);
   const navigate = useNavigate("");
 
   const changeTitle = (event) => {
@@ -72,13 +72,15 @@ const RegistGuide = () => {
         alert("등록되었습니다.");
         navigate("/Guide");
       }else{
+        console.log(data);
         console.log("실패: "+res.error);
       }
     })
   }
 
   const handleGeocode = async () => {
-    
+    const clientId = '0h0avu08yx';  // 애플리케이션 등록 시 발급받은 client id값
+    const clientSecret = 'sDQyBLGcv8054xLR7m4ZiXXgn4kjYuCHPTpqc1V2';  // 애플리케이션 등록 시 발급받은 client secret값
     const apiUrl = 'https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode';
 
     try {
@@ -150,4 +152,6 @@ const RegistGuide = () => {
 };
 
 export default RegistGuide;
+
+
 

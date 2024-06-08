@@ -11,6 +11,7 @@ import Profile from "./member/Profile";
 import RegistGuide from "./guide/RegistGuide";
 import SimpleNaverMap from "./SimpleNaverMap";
 import DetailPage from "./guide/DetailPage";
+import Messgae from "./Messgae";
 function Router() {
   return (
     <div>
@@ -25,6 +26,8 @@ function Router() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/registGuide" element={<RegistGuide />} />
         <Route path="/detailPage/:id" element={<DetailPage />} />
+        <Route path="/message" element={<Messgae />} />
+        <Route path="/message/:to" element={<Messgae />} />
       </Routes>
     </div>
   );
