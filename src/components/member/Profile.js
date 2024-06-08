@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Form, Button } from "react-bootstrap";
 import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const [name, setName] = useState("");
@@ -8,6 +9,7 @@ const Profile = () => {
   const [checkPassword, setCheckPassword] = useState("");
   const [cookies, setCookie, removeCookie] = useCookies(["user"]);
   const email = cookies.user;
+  const navigate = useNavigate("");
 
   const chName = (event) => {
     setName(event.target.value);
@@ -80,7 +82,7 @@ const Profile = () => {
         alert("비밀번호 변경완료");
         alert("다시 로그인 해주세요");
         removeCookie("user"); // 쿠키 삭제
-        window.location.href = "/main";  //main화면으로 이동
+        navigate("/login");
       }else
       alert("변경 실패");
     })

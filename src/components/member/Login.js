@@ -2,11 +2,13 @@ import { Form, Button, Container } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useEffect } from "react";
 import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [cookies, setCookie, removeCookie] = useCookies(["user"]);
+  const navigate = useNavigate("");
   const changeEmail = (event) => {
     setEmail(event.target.value);
   };
@@ -44,7 +46,7 @@ const Login = () => {
         if (res.status === 200) {
           alert("로그인 성공");
           setCookie("user", data.email);
-          window.location.href = "/main";
+          navigate("/main");
         } else {
           alert("로그인 실패");
         }

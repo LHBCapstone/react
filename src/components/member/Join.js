@@ -1,7 +1,6 @@
 import Form from "react-bootstrap/Form";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
 
 function Join() {
   // 회원가입에 필요한 정보 선언
@@ -119,7 +118,7 @@ function Join() {
       .then((res) => {
         if (res.status === 200) {
           alert("회원가입 성공");
-          window.location.href = "/login";
+          navigate("/login");
         } else {
           console.log(res.status);
         }

@@ -4,7 +4,6 @@ const SimpleNaverMap = () => {
     const mapRef = useRef(null);
     const lat = 35.8467508; // 위도
     const lng = 128.583211; // 경도
-
     useEffect(() => {
         const { naver } = window;
         if (mapRef.current && naver) {

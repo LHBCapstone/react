@@ -17,6 +17,7 @@ function NavTop() {
       setIsLoggedIn(true);
     } else {
       setIsLoggedIn(false);
+      return;
     } // 한 번만 실행됩니다.
     const data = {
       email: cookies.user,
