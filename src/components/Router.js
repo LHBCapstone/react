@@ -10,6 +10,7 @@ import Companion from "./Companion";
 import Profile from "./member/Profile";
 import RegistGuide from "./guide/RegistGuide";
 import SimpleNaverMap from "./SimpleNaverMap";
+import DetailPage from "./guide/DetailPage";
 function Router() {
   return (
     <div>
@@ -23,6 +24,7 @@ function Router() {
         <Route path="/companion" element={<Companion />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/registGuide" element={<RegistGuide />} />
+        <Route path="/detailPage/:id" element={<DetailPage />} />
       </Routes>
     </div>
   );

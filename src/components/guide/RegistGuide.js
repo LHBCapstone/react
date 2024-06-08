@@ -78,8 +78,7 @@ const RegistGuide = () => {
   }
 
   const handleGeocode = async () => {
-    const clientId = '0h0avu08yx';  // 애플리케이션 등록 시 발급받은 client id값
-    const clientSecret = 'sDQyBLGcv8054xLR7m4ZiXXgn4kjYuCHPTpqc1V2';  // 애플리케이션 등록 시 발급받은 client secret값
+    
     const apiUrl = 'https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode';
 
     try {
