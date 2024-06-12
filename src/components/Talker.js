@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import { useCookies } from "react-cookie";
+import ShowMessage from "../ShowMessage";
 
-const Talker = ({ email, setTo }) => {
+const Talker = ({ email, setTo, setMessage, setToId }) => {
   const [talker, setTalker] = useState([]);
   const [messages, setMessages] = useState([]);
   const [cookies] = useCookies(["user"]);
+  const [toMemberEmail, setToMemberEmail] = useState("");
 
-  const showMessage = (toId) => () => {
+  const showMessage = (toId, index) => () => {
     const data = {
       toMemberId: toId,
       fromMemberEmail: cookies.user,
@@ -21,8 +23,11 @@ const Talker = ({ email, setTo }) => {
     })
       .then((res) => res.json())
       .then((res) => {
-        setTo(res[0].toMemberEmail);
-        setMessages([res[0].content]);
+        setTo(talker[index].toMemberEmail);
+        setMessages(res.map((value) => value.content));
+        setToMemberEmail(talker[index]);
+        setMessage(res.map((value) => value.content));
+        setToId(talker[index].toMemberId);
       });
   };
 
@@ -44,14 +49,9 @@ const Talker = ({ email, setTo }) => {
   return (
     <div>
       {talker.map((talker, index) => (
-        <Button key={index} onClick={showMessage(talker.toMemberId)}>
+        <Button key={index} onClick={showMessage(talker.toMemberId, index)}>
           <h4>{talker.toMemberName}</h4>
         </Button>
-      ))}
-      {messages.map((message, index) => (
-        <ul key={index}>
-          <li key={index}>{message.content}</li>
-        </ul>
       ))}
     </div>
   );

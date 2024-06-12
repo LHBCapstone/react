@@ -7,6 +7,7 @@ const Profile = () => {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [checkPassword, setCheckPassword] = useState("");
+  const [point, setPoint] = useState("");
   const [cookies, setCookie, removeCookie] = useCookies(["user"]);
   const email = cookies.user;
   const navigate = useNavigate("");
@@ -20,7 +21,6 @@ const Profile = () => {
   const chCheckPassword = (event) => {
     setCheckPassword(event.target.value);
   };
-
 
   //이벤트 호출을 하지 않아도 자동으로 가장먼저 호출됨
   useEffect(() => {
@@ -42,12 +42,12 @@ const Profile = () => {
       .then((res) => {
         if (res.status === 200) {
           return res.json();
-          ;
         }
       })
       .then(
         (data) => {
           setName(data.name);
+          setPoint(data.point);
         },
         (err) => {
           alert(err);
@@ -57,7 +57,7 @@ const Profile = () => {
 
   //비밀번호 변경 함수
   const changePassword = () => {
-    if(password!==checkPassword){
+    if (password !== checkPassword) {
       setPassword("");
       setCheckPassword("");
       alert("비밀번호가 일치하지 않습니다.");
@@ -65,9 +65,9 @@ const Profile = () => {
     }
 
     const data = {
-      email : email,
-      password : password
-    }
+      email: email,
+      password: password,
+    };
 
     fetch("http://localhost:8080/user/changePw", {
       method: "POST",
@@ -76,16 +76,15 @@ const Profile = () => {
       },
       body: JSON.stringify(data),
     })
-    .then((res) => res)
-    .then((res) => {
-      if(res.status === 200){
-        alert("비밀번호 변경완료");
-        alert("다시 로그인 해주세요");
-        removeCookie("user"); // 쿠키 삭제
-        navigate("/login");
-      }else
-      alert("변경 실패");
-    })
+      .then((res) => res)
+      .then((res) => {
+        if (res.status === 200) {
+          alert("비밀번호 변경완료");
+          alert("다시 로그인 해주세요");
+          removeCookie("user"); // 쿠키 삭제
+          navigate("/login");
+        } else alert("변경 실패");
+      });
   };
 
   //이름 변경 함수
@@ -110,21 +109,31 @@ const Profile = () => {
         }
       });
   };
-  
+
   return (
     <div>
       <div>
         <Form>
           <Form.Label>Email</Form.Label>
           <Form.Control value={email} disabled />
+          <Form.Label>Point</Form.Label>
+          <Form.Control value={point} disabled />
           <Form.Label>이름</Form.Label>
           <Form.Control value={name} onChange={chName} />
           <Button onClick={changeName}>이름 변경</Button>
           <br />
           <Form.Label>비밀번호</Form.Label>
-          <Form.Control type="password" value={password} onChange={chPassword} />
+          <Form.Control
+            type="password"
+            value={password}
+            onChange={chPassword}
+          />
           <Form.Label>비밀번호 확인</Form.Label>
-          <Form.Control type="password" value={checkPassword} onChange={chCheckPassword} />
+          <Form.Control
+            type="password"
+            value={checkPassword}
+            onChange={chCheckPassword}
+          />
           <Button onClick={changePassword}>비밀번호 변경</Button>
         </Form>
       </div>
