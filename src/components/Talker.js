@@ -3,8 +3,7 @@ import { Button } from "react-bootstrap";
 import { useCookies } from "react-cookie";
 import ShowMessage from "../ShowMessage";
 
-const Talker = ({ email, setTo, setMessage, setToId }) => {
-  const [talker, setTalker] = useState([]);
+const Talker = ({ email, setTo, setMessage, setToId, setTalker, talker }) => {
   const [messages, setMessages] = useState([]);
   const [cookies] = useCookies(["user"]);
   const [toMemberEmail, setToMemberEmail] = useState("");

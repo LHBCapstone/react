@@ -5,6 +5,7 @@ import { Button } from "react-bootstrap";
 import { useCookies } from "react-cookie";
 import Talker from "./Talker";
 import ShowMessage from "../ShowMessage";
+import Reservation from "../Reservation";
 
 const Message = () => {
   const { to } = useParams();
@@ -12,15 +13,26 @@ const Message = () => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [toId, setToId] = useState("");
-  const [at, setAt] = useState(""); //대화 시간
-  const [talk, setTalk] = useState([]); //대화내용
   const [cookies] = useCookies(["user"]);
+  const [talker, setTalker] = useState([]);
+  const [rsvComment, setRsvComment] = useState("예약하기");
   const user = cookies.user;
 
   const changeMessage = (e) => {
     setMessage(e.target.value);
   };
-
+  const fetchTalker = () => {
+    fetch(`http://localhost:8080/getTalker/${user}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setTalker(res);
+      });
+  };
   const fetchMessage = () => {
     const data = {
       toMemberId: toId,
@@ -35,7 +47,11 @@ const Message = () => {
     })
       .then((res) => res.json())
       .then((res) => {
-        setMessages(res.map((value) => value.content));
+        if (Array.isArray(res)) {
+          setMessages(res.map((value) => value.content));
+        } else {
+          console.error("Unexpected response structure:", res);
+        }
       });
   };
   useEffect(() => {
@@ -45,11 +61,7 @@ const Message = () => {
       headers: {
         "Content-Type": "application/json; charset=utf-8",
       },
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        setTalk([res]);
-      });
+    });
   }, [user]);
   const send = () => {
     const data = {
@@ -57,6 +69,10 @@ const Message = () => {
       toMember: toMember,
       fromMember: user,
     };
+    if (data.toMember === data.fromMember) {
+      alert("본인 계시물입니다.");
+      return;
+    }
     fetch("http://localhost:8080/sendMessage", {
       method: "POST",
       headers: {
@@ -66,12 +82,15 @@ const Message = () => {
     }).then(() => {
       setMessage("");
       fetchMessage();
+      fetchTalker();
     });
   };
 
   return (
     <div>
       <Talker
+        setTalker={setTalker}
+        talker={talker}
         email={user}
         setTo={setToMember}
         setMessage={setMessages}
@@ -88,6 +107,7 @@ const Message = () => {
         />
       </Form.Group>
       <Button onClick={send}>보내기</Button>
+      <Reservation toMember={toMember} fromMember={user} />
     </div>
   );
 };
