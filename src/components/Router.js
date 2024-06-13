@@ -12,6 +12,7 @@ import RegistGuide from "./guide/RegistGuide";
 import SimpleNaverMap from "./SimpleNaverMap";
 import DetailPage from "./guide/DetailPage";
 import Messgae from "./Messgae";
+import MyPosts from "./MyPosts";
 function Router() {
   return (
     <div>
@@ -29,6 +30,7 @@ function Router() {
         <Route path="/message" element={<Messgae />} />
         <Route path="/message/:to" element={<Messgae />} />
         <Route path="/message/:to/:guideId" element={<Messgae />} />
+        <Route path="/myPosts" element={<MyPosts />} />
       </Routes>
     </div>
   );

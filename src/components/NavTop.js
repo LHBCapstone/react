@@ -93,9 +93,8 @@ function NavTop() {
           {isLoggedIn ? (
             <div className="user-info">
               <div style={{ color: "white" }}>{name}님 안녕하세요!</div>;
-              <Link to="/profile">회원 정보 확인</Link>
-              '  '
-              <Link to="/message">채팅</Link>
+              <Link to="/profile">회원 정보 확인</Link>' '
+              <Link to="/message">채팅</Link>' '<Link to="/myPosts">내 글</Link>
               <button onClick={handleLogout}>로그아웃</button>
             </div>
           ) : (

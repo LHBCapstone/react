@@ -6,26 +6,23 @@ const Reservation = ({ guideId, toMember, fromMember }) => {
   const [status, setStatus] = useState();
 
   useEffect(() => {
-    if (guideId) {
-      // guideId가 유효한 값일 때만 fetch 호출
-      fetch(`http://localhost:8080/guide/getGuide/${guideId}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json; charset=utf-8",
-        },
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          if (res.reservation === 0) {
-            setStatus(0);
-            setText("예약하기");
-          } else if (res.reservation === 1) {
-            setStatus(1);
-            setText("요청중");
-          }
-        });
-    }
-  }, [guideId]); // guideId가 변경될 때마다 useEffect 실행
+    fetch(`http://localhost:8080/guide/getGuide/${guideId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.reservation === 0) {
+          setStatus(0);
+          setText("예약하기");
+        } else if (res.reservation === 1) {
+          setStatus(1);
+          setText("요청중");
+        }
+      });
+  }, [status]);
 
   const reservation = () => {
     const data = {
@@ -33,9 +30,6 @@ const Reservation = ({ guideId, toMember, fromMember }) => {
       fromMember: fromMember,
       guideId: guideId,
     };
-    if (status === 1) {
-      return;
-    }
     fetch(`http://localhost:8080/requestRes/${status}`, {
       method: "POST",
       headers: {
@@ -45,13 +39,14 @@ const Reservation = ({ guideId, toMember, fromMember }) => {
     })
       .then((res) => res.json())
       .then((res) => {
-        if (res.status === 200) {
-          alert("요청 완료");
-          setStatus(res.responseStatus);
+        if (res === 0) {
+          setStatus(0);
           setText("요청중");
+        } else if (res === 1) {
+          setStatus(1);
+          setText("예약하기");
         }
       });
-    console.log(data);
   };
 
   return (
