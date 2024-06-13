@@ -28,6 +28,7 @@ function Router() {
         <Route path="/detailPage/:id" element={<DetailPage />} />
         <Route path="/message" element={<Messgae />} />
         <Route path="/message/:to" element={<Messgae />} />
+        <Route path="/message/:to/:guideId" element={<Messgae />} />
       </Routes>
     </div>
   );

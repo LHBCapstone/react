@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Form } from "react-bootstrap";
-import { useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import { useCookies } from "react-cookie";
 import Talker from "./Talker";
@@ -9,15 +9,19 @@ import Reservation from "../Reservation";
 
 const Message = () => {
   const { to } = useParams();
+  const { guideId } = useParams();
   const [toMember, setToMember] = useState("");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [toId, setToId] = useState("");
   const [cookies] = useCookies(["user"]);
   const [talker, setTalker] = useState([]);
-  const [rsvComment, setRsvComment] = useState("예약하기");
   const user = cookies.user;
+  const navigate = useNavigate("");
 
+  const toRes = () => {
+    navigate(`/detailPage/${guideId}`);
+  };
   const changeMessage = (e) => {
     setMessage(e.target.value);
   };
@@ -107,7 +111,8 @@ const Message = () => {
         />
       </Form.Group>
       <Button onClick={send}>보내기</Button>
-      <Reservation toMember={toMember} fromMember={user} />
+      {/* <Link to={`/detainPage/${guideId}`}>예약하러 가기</Link> */}
+      <Button onClick={toRes}>예약하러 가기</Button>
     </div>
   );
 };

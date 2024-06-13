@@ -15,7 +15,11 @@ const DetailPage = () => {
   const { id } = useParams();
 
   const [cookie] = useCookies(["user"]);
+
   useEffect(() => {
+    setGuideId(id);
+    setFromMember(cookie.user);
+
     fetch(`http://localhost:8080/guide/getGuide/${id}`, {
       method: "GET",
       headers: {
@@ -30,16 +34,15 @@ const DetailPage = () => {
         setPrice(res.price);
         setToMember(res.member.email);
       });
-    setGuideId(id);
-    setFromMember(cookie.user);
-  }, []);
+  }, [id, cookie.user]);
+
   return (
     <div>
       <h1>{title}</h1>
       <h2>{writer}</h2>
       <h3>{content}</h3>
       <h4>{price}</h4>
-      <Link to={`/message/${toMember}`}>
+      <Link to={`/message/${toMember}/${guideId}`}>
         <Button>메세지 보내기</Button>
       </Link>
       <Reservation
