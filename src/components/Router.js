@@ -3,9 +3,10 @@ import { Routes, Route } from "react-router-dom";
 
 import Login from "./member/Login";
 import Join from "./member/Join";
-import Main from "./Main";
+
 import Guide from "./guide/Guide";
 import Plan from "./Plan";
+import Main from "./Main";
 import Companion from "./Companion";
 import Profile from "./member/Profile";
 import RegistGuide from "./guide/RegistGuide";
@@ -13,6 +14,9 @@ import SimpleNaverMap from "./SimpleNaverMap";
 import DetailPage from "./guide/DetailPage";
 import Messgae from "./Messgae";
 import MyPosts from "./MyPosts";
+import Modal from "./Modal";
+import Disgin from "./Disgin";
+
 function Router() {
   return (
     <div>
@@ -31,6 +35,10 @@ function Router() {
         <Route path="/message/:to" element={<Messgae />} />
         <Route path="/message/:to/:guideId" element={<Messgae />} />
         <Route path="/myPosts" element={<MyPosts />} />
+
+        <Route path="/simpleNaverMap" element={<SimpleNaverMap />} />
+        <Route path="/modal" element={<Modal />} />
+        <Route path="/component" element={<Disgin />} />
       </Routes>
     </div>
   );

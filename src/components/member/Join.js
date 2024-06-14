@@ -1,9 +1,8 @@
-import Form from "react-bootstrap/Form";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 function Join() {
-  // 회원가입에 필요한 정보 선언
   const [firstEmail, setFirstEmail] = useState("");
   const [lastEmail, setLastEmail] = useState("");
   const [name, setName] = useState("");
@@ -13,12 +12,11 @@ function Join() {
 
   const navigate = useNavigate();
 
-  //입력이 들어올때마다 email이 업데이트됨
   const changeFirstEmail = (event) => {
     setFirstEmail(event.target.value);
-    //이메일 확인을 하고 이메일 변경이 있으면 다시 false
     setUsableEmail(false);
   };
+
   const changeLastEmail = (event) => {
     setLastEmail(event.target.value);
     setUsableEmail(false);
@@ -40,34 +38,28 @@ function Join() {
     if (pwd !== checkPwd) {
       alert("비밀번호가 일치하지 않습니다.");
       return false;
-    } else if (firstEmail === "") {
+    } else if (firstEmail === "" || lastEmail === "") {
       alert("이메일을 입력해 주세요.");
-      return false;
-    } else if (lastEmail === "") {
-      alert("빈칸이 있습니다.");
       return false;
     } else if (name === "") {
       alert("이름을 입력해주세요.");
       return false;
     } else if (pwd === "") {
       alert("비밀번호를 입력해 주세요.");
-      return;
-    } else if (usableEmail === false) {
+      return false;
+    } else if (!usableEmail) {
       alert("사용 가능한 이메일인지 확인해 주세요.");
       return false;
     }
     return true;
   };
-  /* 이메일 중복 체크 */
+
   const checkEmail = () => {
-    if (firstEmail === "") {
-      alert("빈 칸이 있습니다.");
+    if (firstEmail === "" || lastEmail === "") {
+      alert("이메일을 입력해 주세요.");
       return;
     }
-    if (lastEmail === "") {
-      alert("빈칸이 있습니다.");
-      return;
-    }
+
     const data = {
       email: firstEmail + "@" + lastEmail,
     };
@@ -79,34 +71,32 @@ function Join() {
       },
       body: JSON.stringify(data),
     })
-      .then((res) => res)
-      .then((res) => {
-        if (res.status === 200) {
-          alert("사용가능");
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.available) {
+          alert("사용 가능한 이메일입니다.");
           setUsableEmail(true);
-          return;
         } else {
-          alert("이미 사용중인 이메일");
+          alert("이미 사용중인 이메일입니다.");
           setUsableEmail(false);
-          return;
         }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
       });
   };
 
-    /* 회원가입 */
   const join = () => {
-    if (!usableEmail) {
-      alert("사용 가능한 이메일인지 확인해 주세요.");
+    if (!checkEmpty()) {
       return;
     }
-    if(!checkEmpty()){
-      return;
-    }
+
     const data = {
       name: name,
       email: firstEmail + "@" + lastEmail,
       password: pwd,
     };
+
     fetch("http://localhost:8080/user/signup", {
       method: "POST",
       headers: {
@@ -114,91 +104,95 @@ function Join() {
       },
       body: JSON.stringify(data),
     })
-      .then((res) => res)
       .then((res) => {
         if (res.status === 200) {
           alert("회원가입 성공");
           navigate("/login");
         } else {
-          console.log(res.status);
+          alert("회원가입 실패");
         }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
       });
   };
 
   return (
-    <div className="join-form">
-      <table className="table">
-        <tbody>
-          <tr>
-            <th className="col-2">이메일</th>
-            <td>
-              <input
-                type="text"
-                value={firstEmail}
-                onChange={changeFirstEmail}
-                size="50px"
-              />
-              @
-              <input
-                type="text"
-                value={lastEmail}
-                onChange={changeLastEmail}
-                size="50px"
-              />{" "}
-              &nbsp; &nbsp;
-              <button className="btn btn-outline-danger" onClick={checkEmail}>
-                <i className="fas fa-check"></i> 이메일 중복 확인
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <th>이름</th>
-            <td>
+    <Container className="join-form">
+      <Row className="justify-content-center">
+        <Col md={6}>
+          <h2 className="text-center mb-4">회원가입</h2>
+          <Form>
+            <Form.Group className="mb-3">
+              <Form.Label>이메일</Form.Label>
+              <div className="d-flex">
+                <Form.Control
+                  type="text"
+                  value={firstEmail}
+                  onChange={changeFirstEmail}
+                  placeholder="example"
+                  style={{ maxWidth: "150px" }}
+                />
+                <span style={{ margin: "0 10px" }}>@</span>
+                <Form.Control
+                  type="text"
+                  value={lastEmail}
+                  onChange={changeLastEmail}
+                  placeholder="domain.com"
+                  style={{ maxWidth: "150px" }}
+                />
+                <Button
+                  variant="outline-danger"
+                  onClick={checkEmail}
+                  style={{ marginLeft: "10px" }}
+                >
+                  이메일 중복 확인
+                </Button>
+              </div>
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>이름</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Search"
-                className="me-2"
-                aria-label="Search"
+                value={name}
                 onChange={changeName}
+                placeholder="이름을 입력해주세요."
+                style={{ maxWidth: "250px" }}
               />
-            </td>
-          </tr>
+            </Form.Group>
 
-          <tr>
-            <th>비밀번호</th>
-            <td>
-              <input
+            <Form.Group className="mb-3">
+              <Form.Label>비밀번호</Form.Label>
+              <Form.Control
                 type="password"
                 value={pwd}
                 onChange={changePwd}
-                size="50px"
-                autoCorrect="off"
+                placeholder="비밀번호를 입력해주세요."
+                style={{ maxWidth: "300px" }}
               />
-            </td>
-          </tr>
+            </Form.Group>
 
-          <tr>
-            <th>비밀번호 확인</th>
-            <td>
-              <input
+            <Form.Group className="mb-3">
+              <Form.Label>비밀번호 확인</Form.Label>
+              <Form.Control
                 type="password"
                 value={checkPwd}
                 onChange={changeCheckPwd}
-                size="50px"
-                autoCorrect="off"
+                placeholder="비밀번호를 다시 입력해주세요."
+                style={{ maxWidth: "300px" }}
               />
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <br />
+            </Form.Group>
 
-      <div className="my-3 d-flex justify-content-center">
-        <button className="btn btn-outline-secondary" onClick={join}>
-          <i className="fas fa-user-plus"></i> 회원가입
-        </button>
-      </div>
-    </div>
+            <div className="d-grid gap-2">
+              <Button variant="secondary" size="lg" onClick={join}>
+                회원가입
+              </Button>
+            </div>
+          </Form>
+        </Col>
+      </Row>
+    </Container>
   );
 }
 

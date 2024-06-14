@@ -1,0 +1,60 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* 반투명한 배경 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 10px;
+    border-radius: 5px;
+    max-width: 50%;
+    max-height: 90%;
+    overflow: auto;
+}
+
+.modal-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+}
+
+.modal-image {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.modal-title {
+    background-color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.modal-body {
+    font-size: 1rem;
+    line-height: 1.5;
+    background-color: white;
+}
+.modal-body-1 {
+    font-size: 1rem;
+    line-height: 1.6;
+    background-color: white;
+}
+.modal-body-2 {
+    font-size: 1rem;
+    line-height: 1.8;
+    background-color: white;
+}

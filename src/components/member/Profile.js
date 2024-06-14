@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 
@@ -8,9 +8,9 @@ const Profile = () => {
   const [password, setPassword] = useState("");
   const [checkPassword, setCheckPassword] = useState("");
   const [point, setPoint] = useState("");
-  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
+  const [cookies, , removeCookie] = useCookies(["user"]);
   const email = cookies.user;
-  const navigate = useNavigate("");
+  const navigate = useNavigate();
 
   const chName = (event) => {
     setName(event.target.value);
@@ -22,16 +22,13 @@ const Profile = () => {
     setCheckPassword(event.target.value);
   };
 
-  //이벤트 호출을 하지 않아도 자동으로 가장먼저 호출됨
   useEffect(() => {
+    if (!email) return; // email이 없으면 아무 것도 실행하지 않음
+
     const cookieEmail = {
       email: email,
     };
-    const data = {
-      name: name,
-      password: password,
-      checkPassword: checkPassword,
-    };
+
     fetch("http://localhost:8080/user/profile", {
       method: "POST",
       headers: {
@@ -42,6 +39,8 @@ const Profile = () => {
       .then((res) => {
         if (res.status === 200) {
           return res.json();
+        } else {
+          throw new Error("프로필 정보를 불러오는 데 실패했습니다.");
         }
       })
       .then(
@@ -50,12 +49,11 @@ const Profile = () => {
           setPoint(data.point);
         },
         (err) => {
-          alert(err);
+          alert(err.message);
         }
       );
   }, [email]);
 
-  //비밀번호 변경 함수
   const changePassword = () => {
     if (password !== checkPassword) {
       setPassword("");
@@ -76,23 +74,28 @@ const Profile = () => {
       },
       body: JSON.stringify(data),
     })
-      .then((res) => res)
       .then((res) => {
         if (res.status === 200) {
-          alert("비밀번호 변경완료");
+          alert("비밀번호 변경 완료");
           alert("다시 로그인 해주세요");
-          removeCookie("user"); // 쿠키 삭제
+          removeCookie("user");
           navigate("/login");
-        } else alert("변경 실패");
+        } else {
+          alert("비밀번호 변경 실패");
+        }
+      })
+      .catch((error) => {
+        alert("비밀번호 변경 중 오류가 발생했습니다.");
+        console.error(error);
       });
   };
 
-  //이름 변경 함수
   const changeName = () => {
     const data = {
       email: email,
       name: name,
     };
+
     fetch("http://localhost:8080/user/changeName", {
       method: "POST",
       headers: {
@@ -100,44 +103,66 @@ const Profile = () => {
       },
       body: JSON.stringify(data),
     })
-      .then((res) => res)
       .then((res) => {
         if (res.status === 200) {
           alert("이름 변경 완료");
         } else {
-          alert("변경 실패");
+          alert("이름 변경 실패");
         }
+      })
+      .catch((error) => {
+        alert("이름 변경 중 오류가 발생했습니다.");
+        console.error(error);
       });
   };
 
   return (
-    <div>
-      <div>
-        <Form>
-          <Form.Label>Email</Form.Label>
-          <Form.Control value={email} disabled />
-          <Form.Label>Point</Form.Label>
-          <Form.Control value={point} disabled />
-          <Form.Label>이름</Form.Label>
-          <Form.Control value={name} onChange={chName} />
-          <Button onClick={changeName}>이름 변경</Button>
-          <br />
-          <Form.Label>비밀번호</Form.Label>
-          <Form.Control
-            type="password"
-            value={password}
-            onChange={chPassword}
-          />
-          <Form.Label>비밀번호 확인</Form.Label>
-          <Form.Control
-            type="password"
-            value={checkPassword}
-            onChange={chCheckPassword}
-          />
-          <Button onClick={changePassword}>비밀번호 변경</Button>
-        </Form>
-      </div>
-    </div>
+    <Container>
+      <Row className="justify-content-center mt-5">
+        <Col md={6}>
+          <Form>
+            <Form.Group>
+              <Form.Label>Email</Form.Label>
+              <Form.Control value={email} disabled />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Point</Form.Label>
+              <Form.Control value={point} disabled />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>이름</Form.Label>
+              <Form.Control value={name} onChange={chName} />
+              <Button variant="primary" onClick={changeName} className="mt-3">
+                이름 변경
+              </Button>
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>비밀번호</Form.Label>
+              <Form.Control
+                type="password"
+                value={password}
+                onChange={chPassword}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>비밀번호 확인</Form.Label>
+              <Form.Control
+                type="password"
+                value={checkPassword}
+                onChange={chCheckPassword}
+              />
+              <Button
+                variant="primary"
+                onClick={changePassword}
+                className="mt-3"
+              >
+                비밀번호 변경
+              </Button>
+            </Form.Group>
+          </Form>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 
